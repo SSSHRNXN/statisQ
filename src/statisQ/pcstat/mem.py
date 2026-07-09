@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from ..lib.coloropen import FG, clog
+from ..ui import ui_parts
 import psutil
 
 PERSENT_THRESHOLDS = [
@@ -26,7 +27,10 @@ total, used, available, percent = get_memory_usage()
 def memtotal():
     print(clog(total , level="debug"))   
     print(clog(f'{total / (1024 ** 3):.2f}' , level="debug"))   
-    return f'{total / (1024 ** 3):.2f}'
+    
+    color = usage_status_color(percent)
+    usage_bar = f'{color}{ui_parts.HORIZONTAL_L * 10}'
+    return f'TOTAL: {total / (1024 ** 3):.2f} gb {usage_bar}'
 
 
 print(memtotal())
