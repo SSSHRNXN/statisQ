@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from webbrowser import get
+from os import wait
 
 from ..lib.coloropen import FG, clog
 from ..ui import ui_parts
@@ -29,7 +29,7 @@ def usage_status_color(percent):
         if percent >= threshold:
             return color
 
-def usage_bar(value, length=15):
+def usage_bar(value, length=50):
     bar_color = usage_status_color(percent)
     filled = value * length // 100
     empty = length - filled
@@ -37,16 +37,21 @@ def usage_bar(value, length=15):
 
 def memfullstat():
     allstat = [
-            ('TOTAL:',      f'{get_gb_value(total)}',       100,            usage_bar(100)) , 
-            ('USED:',       f'{get_gb_value(used)}',        percent,        usage_bar(percent)) , 
-            ('AVAILABLE:',  f'{get_gb_value(available)}',   100 - percent,  usage_bar(100 - percent)) , 
-            ('PERCENT:',    f'{percent}%',                  '',         '')
+            ('TOTAL',      f'{get_gb_value(total)}',      usage_bar(100)) , 
+            ('USED',       f'{get_gb_value(used)}',       usage_bar(percent)) , 
+            ('AVAILABLE',  f'{get_gb_value(available)}',  usage_bar(100 - percent)) , 
+            ('PERCENT',    f'{percent}',                 '')
             ]
 
     max_length_label = (max(len(l[0]) for l in allstat))
     max_length_value = (max(len(l[1]) for l in allstat))
 
-    for label, value, percen, bar in allstat:
-        print(f'{label} {value} {percen} {bar}')
+    for label, value, bar in allstat:
+        if label == 'PERCENT':
+            suff = ' %'
+        else:
+            suff = 'GB'
+
+        print(f'{label:<{max_length_label + 1}}{ui_parts.VERTICAL_L} {value:>{max_length_value}} {suff} {ui_parts.VERTICAL_L} {bar}')
 
 memfullstat()
