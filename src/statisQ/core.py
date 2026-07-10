@@ -3,10 +3,15 @@
 import os 
 import time
 import sys
+
+from statisQ.lib.coloropen import TTY_Stat
 from .pcstat import mem
 from .ui.ui_hat_bar import top_bar, bot_bar
+from .ui import ui_incorrect_render
 
 UPDATE_INTERVAL = 1
+MIN_HEIGHT = 21
+MIN_WIDTH = 31 
 
 def enable_alt_screen():
     sys.stdout.write('\033[?1049h')
@@ -19,13 +24,19 @@ def disable_alt_screen():
 def main():
     try:
         while True:
+            COLUMNS = TTY_Stat.columns()
+            LINES = TTY_Stat.lines()
+
             os.system('clear')
 
-            print(top_bar("RAM"))
-            #statistic
-            print(mem.get_stat())
-            #statistic
-            print(bot_bar())
+            if COLUMNS < MIN_WIDTH or LINES < MIN_HEIGHT:
+                print(ui_incorrect_render.failed_render_window(COLUMNS, LINES, MIN_WIDTH, MIN_HEIGHT))
+            else:
+                print(top_bar("RAM"))
+                #statistic
+                print(mem.get_stat())
+                #statistic
+                print(bot_bar())
             time.sleep(UPDATE_INTERVAL)
     except KeyboardInterrupt:
         pass

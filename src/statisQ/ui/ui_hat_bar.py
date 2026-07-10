@@ -9,7 +9,7 @@ def top_bar(label):
     COLUMNS = TTY_Stat.columns()
 
     label_len = len(label) + 4
-    label_str = f'{ui_parts.JOIN_LEFT_L} {label} {ui_parts.JOIN_RIGHT_L}'
+    label_str = f'{ui_parts.CORNER_BR} {label} {ui_parts.CORNER_BL}'
     return f'{ui_parts.CORNER_TL}{label_str}{ui_parts.HORIZONTAL_L * (COLUMNS - 2 - label_len)}{ui_parts.CORNER_TR}'
 
 
