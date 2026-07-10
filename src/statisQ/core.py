@@ -27,7 +27,7 @@ def main():
             COLUMNS = TTY_Stat.columns()
             LINES = TTY_Stat.lines()
 
-            os.system('clear')
+            sys.stdout.write('\033[H')
 
             if COLUMNS < MIN_WIDTH or LINES < MIN_HEIGHT:
                 print(ui_incorrect_render.failed_render_window(COLUMNS, LINES, MIN_WIDTH, MIN_HEIGHT))
@@ -41,6 +41,8 @@ def main():
                 print(cpu.get_cpu_usage())
                 print(bot_bar())
             time.sleep(UPDATE_INTERVAL)
+            sys.stdout.write('\033[J')
+            sys.stdout.flush()
     except KeyboardInterrupt:
         pass
 
