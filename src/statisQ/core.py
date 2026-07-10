@@ -27,11 +27,11 @@ def main():
             COLUMNS = TTY_Stat.columns()
             LINES = TTY_Stat.lines()
 
-            sys.stdout.write('\033[H')
-
             if COLUMNS < MIN_WIDTH or LINES < MIN_HEIGHT:
+                os.system('clear')
                 print(ui_incorrect_render.failed_render_window(COLUMNS, LINES, MIN_WIDTH, MIN_HEIGHT))
             else:
+                sys.stdout.write('\033[H')
                 #RAM
                 print(top_bar("RAM", time=True))
                 print(mem.get_stat())
