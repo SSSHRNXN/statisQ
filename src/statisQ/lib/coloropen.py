@@ -16,7 +16,17 @@ class ANSI_Code_output():
 
 
 class TTY_Stat():
+    #constant
     COLUMNS, LINES = shutil.get_terminal_size()
+
+    @classmethod
+    def columns(cls):
+        return shutil.get_terminal_size().columns
+
+    @classmethod
+    def lines(cls):
+        return shutil.get_terminal_size().lines
+
         
 class ANSI_Codes_Foreground(ANSI_Code_output):
 
