@@ -21,4 +21,3 @@ def bar(percent_for_color, value, length=10):
     filled = value * length // 100
     empty = length - filled
     return f'{bar_color}{"+" * int(filled)}{BG.RESET}{FG.GRAY}{ui_parts.HORIZONTAL_L * int(empty)}{FG.RESET}'
-

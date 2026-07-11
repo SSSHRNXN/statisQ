@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from ..lib.coloropen import FG, BG, TTY_Stat
+from ..lib.coloropen import FG, BG, ST, TTY_Stat
 from ..ui import ui_parts
 from datetime import datetime 
 
@@ -10,17 +10,17 @@ def top_bar(label, text="", time=False):
     COLUMNS = TTY_Stat.columns()
 
     label_len = len(label) + 2
-    label_str = f'{ui_parts.CORNER_BR}{label}{ui_parts.CORNER_BL}'
+    label_str = f'{ui_parts.CORNER_BR}{ST.REVERSE}{label}{ST.RESET}{ui_parts.CORNER_BL}'
     if text == "":
         additional_text = ""
         add_text_len = 0
     else:
-        additional_text = f'{ui_parts.CORNER_BR}{text}{ui_parts.CORNER_BL}'
+        additional_text = f'{ui_parts.CORNER_BR}{ST.REVERSE}{text}{ST.RESET}{ui_parts.CORNER_BL}'
         add_text_len = len(text) + 2
 
     if time:
         remover_value = 2 + 10 
-        curr_time = f'{ui_parts.CORNER_BR}{datetime.now().time().strftime("%H:%M:%S")}{ui_parts.CORNER_BL}'
+        curr_time = f'{ui_parts.CORNER_BR}{ST.REVERSE}{datetime.now().time().strftime("%H:%M:%S")}{ST.RESET}{ui_parts.CORNER_BL}'
     else:
         remover_value = 2
         curr_time = ""

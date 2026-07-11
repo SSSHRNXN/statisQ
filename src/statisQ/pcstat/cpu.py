@@ -1,26 +1,29 @@
 #!/usr/bin/env python3
 
-from calendar import c
-
+from platform import machine
 from ..lib.coloropen import TTY_Stat
 from ..ui import ui_parts, ui_bar
 import psutil
 
-label_len = 12
+label_len = 10
 value_len = 6
+offset = 7 # count of spaces in f strigs
+
+def ubar(value:int):
+
+    bar_length = max(TTY_Stat.columns() - label_len - value_len - offset, 10)
+    bar = ui_bar.bar(value, value, bar_length)
+
+    return bar
 
 def get_cpu_usage():
-    label = "CPU_USAGE"
-
+    label = "USAGE"
     cpu_usage = psutil.cpu_percent()
 
-    bar_length = max(TTY_Stat.columns() - label_len - value_len - 7, 10)
-    bar = ui_bar.bar(cpu_usage, cpu_usage, bar_length)
-
-    return f'{ui_parts.VERTICAL_L}{label:<{label_len}} {cpu_usage:^{value_len}} {" %"} {bar}{ui_parts.VERTICAL_L}' 
+    return f'{ui_parts.VERTICAL_L}{label:<{label_len}} {cpu_usage:^{value_len}} {" %"} {ubar(int(cpu_usage))}{ui_parts.VERTICAL_L}'
 
 def get_cpu_temp():
-    label = "CPU_TEMP"
+    label = "TEMP"
 
     sens_temps = psutil.sensors_temperatures()
     cpu_temp = sens_temps.get('k10temp', [])
@@ -31,7 +34,7 @@ def get_cpu_temp():
             ctemp = int(e.current)
             break
 
-    bar_length = max(TTY_Stat.columns() - label_len - value_len - 7, 10)
+    bar_length = max(TTY_Stat.columns() - label_len - value_len - offset, 10)
     if ctemp == "###":
         bar = ui_bar.bar(0, 100, bar_length)
     else:
@@ -50,24 +53,23 @@ def get_cpu_name():
             return 'CPU_NAME Not found'
 
 def get_cpu_freq():
-    label = "CPU_FREQ"
-
+    label = "FREQ"
     curr_fq, min_fq, max_fq = psutil.cpu_freq()
     mhz_pct = int(int(curr_fq) / int(max_fq) * 100)
 
-    bar_length = max(TTY_Stat.columns() - label_len - value_len - 7, 10)
-    bar = ui_bar.bar((mhz_pct), mhz_pct, bar_length)
-
-    return f'{ui_parts.VERTICAL_L}{label:<{label_len}}{int(curr_fq):^{value_len}} {"MHz"} {bar}{ui_parts.VERTICAL_L}'
+    return f'{ui_parts.VERTICAL_L}{label:<{label_len}}{int(curr_fq):^{value_len}} {"MHz"} {ubar(int(mhz_pct))}{ui_parts.VERTICAL_L}'
 
 def get_max_cpu_freq():
-    label = "CPU_MAX_FQ"
+    label = "MAX_FQ"
     curr_fq, min_fq, max_fq = psutil.cpu_freq()
     
-    bar_length = max(TTY_Stat.columns() - label_len - value_len - 7, 10)
-    bar = ui_bar.bar(0, 0, bar_length)
-    return f'{ui_parts.VERTICAL_L}{label:<{label_len}}{int(max_fq):^{value_len}} {"MHz"} {bar}{ui_parts.VERTICAL_L}'
+    return f'{ui_parts.VERTICAL_L}{label:<{label_len}}{int(max_fq):^{value_len}} {"MHz"} {ubar(int(0))}{ui_parts.VERTICAL_L}'
 
+def get_cpu_arch():
+    label = "ARCH"
+    arch = machine()
+
+    return f'{ui_parts.VERTICAL_L}{label:<{label_len}} {arch:^{value_len + 4}}{ubar(int(0))}{ui_parts.VERTICAL_L}' 
 
 def get_stat():
     lines = []
@@ -76,5 +78,6 @@ def get_stat():
     lines.append(get_cpu_temp())
     lines.append(get_cpu_freq())
     lines.append(get_max_cpu_freq())
+    lines.append(get_cpu_arch())
     
     return '\n'.join(lines)
