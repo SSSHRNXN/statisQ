@@ -28,7 +28,15 @@ def top_bar(label, text="", time=False):
     return f'{ui_parts.CORNER_TL}{label_str}{ui_parts.HORIZONTAL_L * (COLUMNS - remover_value - label_len - add_text_len)}{additional_text}{curr_time}{ui_parts.CORNER_TR}'
 
 
-def bot_bar():
+def bot_bar(text=""):
     COLUMNS = TTY_Stat.columns()
     LINES   = TTY_Stat.lines()
-    return f'{ui_parts.CORNER_BL}{ui_parts.HORIZONTAL_L * (COLUMNS - 2)}{ui_parts.CORNER_BR}'
+
+    if text == "":
+        additional_text = ""
+        add_text_len = 0
+    else:
+        additional_text = f'{ui_parts.CORNER_BR}{ST.REVERSE}{text}{ST.RESET}{ui_parts.CORNER_BL}'
+        add_text_len = len(text) + 2
+
+    return f'{ui_parts.CORNER_BL}{additional_text}{ui_parts.HORIZONTAL_L * (COLUMNS - 2 - add_text_len)}{ui_parts.CORNER_BR}'
