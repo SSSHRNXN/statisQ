@@ -47,6 +47,6 @@ def get_stat():
         else:
             suff = 'gb'
         lines.append(ui_bar.full_bar(label, float(value), suff, bar_value=pct, esymbol=esymbol))
-#        lines.append(f'{bg_color}{ui_parts.VERTICAL_L}{label:<{label_len}}{value:>{value_len}} {suff:<{suff_len}}{bar}{ui_parts.VERTICAL_L}{BG.RESET}')
+
 
     return '\n'.join(lines)
