@@ -37,7 +37,7 @@ def get_cpu_temp():
             break
 
     if ctemp == "###":
-        bar_value = 100
+        bar_value = 0
     else:
         bar_value = ctemp
 
