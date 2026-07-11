@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "statisQ"
-version = "0.1.0"
+version = "0.1.2"
 description = "Terminal-based system resource monitor"
 requires-python = ">=3.10"
 dependencies = [
@@ -16,3 +16,6 @@ sq = "statisQ.core:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+statisQ = ["cfg/*"]
