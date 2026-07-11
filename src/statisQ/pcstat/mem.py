@@ -38,7 +38,7 @@ def get_stat():
     for label, value, pct in allstat:
         if label == '%USE%' or label == 'TOTAL':
             if label == "%USE%":
-                suff = '%%'
+                suff = '%'
             else:
                 suff = "gb"
             bar = ui_bar.bar(pct, pct, bar_length, empty_symbol='+')

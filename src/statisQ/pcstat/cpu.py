@@ -41,7 +41,7 @@ def get_cpu_usage():
     label = "USAGE"
     cpu_usage = psutil.cpu_percent()
 
-    return final_line(label, cpu_usage, "%%")
+    return final_line(label, cpu_usage, "%")
 
 def get_cpu_temp():
     label = "TEMP"
