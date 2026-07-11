@@ -13,7 +13,7 @@ config = ConfigParser()
 config.read(config_file)
 
 #ui
-from statisQ.lib.coloropen import TTY_Stat
+from statisQ.lib.coloropen import TTY_Stat, BG
 from .pcstat import mem, cpu, disk
 from .ui.ui_hat_bar import top_bar, bot_bar
 from .ui import ui_incorrect_render
@@ -54,6 +54,7 @@ def main():
                 print(top_bar("DISK"))
                 print(disk.get_stat())
                 print(bot_bar())
+                print(bot_bar(f'UPDATE INTERVAL:{UPDATE_INTERVAL}'))
             time.sleep(UPDATE_INTERVAL)
             sys.stdout.write('\033[J')
             sys.stdout.flush()

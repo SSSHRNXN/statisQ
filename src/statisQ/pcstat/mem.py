@@ -10,10 +10,11 @@ from ..lib.coloropen import FG, TTY_Stat, clog, BG
 from ..ui import ui_parts, ui_bar
 import psutil
 
+bg_color = f'\033[{config.getint('UI', 'BG_COLOR')}m'
 label_len = config.getint('UI', 'LABEL_LEN')
 value_len = config.getint('UI', 'VALUE_LEN')
 suff_len = config.getint('UI', 'SUFF_LEN')
-offset = 3 #count of spaces(suff) and [] symbols
+offset = config.getint('UI', 'OFFSET')
 
 def get_memory_usage():
     memory_stat = psutil.virtual_memory()
@@ -26,10 +27,10 @@ def get_stat():
     total, used, available, percent = get_memory_usage()
 
     allstat = [
-            ('TOTAL',   f'{get_gb_value(total)}',      0) ,
-            ('USED',    f'{get_gb_value(used)}',       percent) ,
-            ('AVAIL',   f'{get_gb_value(available)}',  100 - percent) ,
-            ('%USE%',       f'{percent}',                  0)
+            ('TOTAL',   f'{get_gb_value(total)}',       0) ,
+            ('AVAIL',   f'{get_gb_value(available)}',   100 - percent) ,
+            ('USAGE',    f'{get_gb_value(used)}',        percent) ,
+            ('%USE%',   f'{percent}',                   percent)
             ]
 
     bar_length = max(TTY_Stat.columns() - label_len - value_len - suff_len - offset,10)
@@ -39,13 +40,14 @@ def get_stat():
         if label == '%USE%' or label == 'TOTAL':
             if label == "%USE%":
                 suff = '%'
+                bar = ui_bar.bar(pct, pct, bar_length)
             else:
                 suff = "gb"
-            bar = ui_bar.bar(pct, pct, bar_length, empty_symbol='+')
+                bar = ui_bar.bar(pct, pct, bar_length, empty_symbol="+")
         else:
             suff = 'gb'
             bar = ui_bar.bar(percent, pct, bar_length)
 
-        lines.append(f'{ui_parts.VERTICAL_L}{label:<{label_len}}{value:>{value_len}} {suff:<{suff_len}}{bar}{ui_parts.VERTICAL_L}')
+        lines.append(f'{bg_color}{ui_parts.VERTICAL_L}{label:<{label_len}}{value:>{value_len}} {suff:<{suff_len}}{bar}{ui_parts.VERTICAL_L}{BG.RESET}')
 
     return '\n'.join(lines)

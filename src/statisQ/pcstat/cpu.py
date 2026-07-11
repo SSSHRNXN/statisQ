@@ -7,41 +7,22 @@ config = ConfigParser()
 config.read(config_file)
 
 from platform import machine
-from ..lib.coloropen import TTY_Stat
+from ..lib.coloropen import TTY_Stat, BG
 from ..ui import ui_parts, ui_bar
 import psutil
 
+bg_color = f'\033[{config.getint('UI', 'BG_COLOR')}m'
 label_len = config.getint('UI', 'LABEL_LEN')
 value_len = config.getint('UI', 'VALUE_LEN')
 suff_len = config.getint('UI', 'SUFF_LEN')
-offset = 3 # count of spaces in f strigs
+offset = config.getint('UI', 'OFFSET')
 
-def ubar(value:int, label):
-
-    if label == 'MAX_FQ' or label == 'ARCH':
-        symbol = "+"
-    else:
-        symbol = ui_parts.HORIZONTAL_L
-
-    bar_length = max(TTY_Stat.columns() - label_len - value_len - suff_len - offset, 10)
-    bar = ui_bar.bar(value, value, bar_length, empty_symbol=symbol)
-
-    return bar
-
-def final_line(label:str, value:float, suff:str, bar_value=None, str_value=None):
-    if bar_value is None:
-        bar_value = int(value)
-
-    if str_value is None:
-        str_value = f'{value:>{value_len}.1f}'
-
-    return str(f'{ui_parts.VERTICAL_L}{label:<{label_len}}{str_value:>{value_len}} {suff:<{suff_len}}{ubar(bar_value, label)}{ui_parts.VERTICAL_L}')
 
 def get_cpu_usage():
     label = "USAGE"
     cpu_usage = psutil.cpu_percent()
 
-    return final_line(label, cpu_usage, "%")
+    return ui_bar.full_bar(label, cpu_usage, "%")
 
 def get_cpu_temp():
     label = "TEMP"
@@ -61,7 +42,7 @@ def get_cpu_temp():
     else:
         bar = ui_bar.bar(ctemp, ctemp, bar_length)
 
-    return final_line(label, int(ctemp), "°C")
+    return ui_bar.full_bar(label, int(ctemp), "°C")
 
 def get_cpu_name():
     with open("/proc/cpuinfo") as file: 
@@ -78,19 +59,19 @@ def get_cpu_freq():
     curr_fq, min_fq, max_fq = psutil.cpu_freq()
     mhz_pct = int(curr_fq) / int(max_fq) * 100
 
-    return final_line(label, mhz_pct, "MHz")
+    return ui_bar.full_bar(label, mhz_pct, "MHz")
 
 def get_max_cpu_freq():
     label = "MAX_FQ"
     curr_fq, min_fq, max_fq = psutil.cpu_freq()
     
-    return final_line(label, max_fq, "MHz", bar_value=0)
+    return ui_bar.full_bar(label, max_fq, "MHz", esymbol="+", bar_value=0)
 
 def get_cpu_arch():
     label = "ARCH"
     arch = machine()
 
-    return final_line(label, 0, "  ", str_value=arch)
+    return ui_bar.full_bar(label, 0, "  ", str_value=arch, esymbol="+")
 
 def get_stat():
     lines = []
