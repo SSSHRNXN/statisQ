@@ -22,6 +22,7 @@ def disable_alt_screen():
     sys.stdout.flush()
 
 def main():
+    enable_alt_screen()
     try:
         while True:
             COLUMNS = TTY_Stat.columns()
@@ -45,8 +46,8 @@ def main():
             sys.stdout.flush()
     except KeyboardInterrupt:
         pass
+    finally:
+        disable_alt_screen()
 
 if __name__ == '__main__':
-    enable_alt_screen()
     main()
-    disable_alt_screen()
