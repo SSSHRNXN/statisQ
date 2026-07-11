@@ -23,11 +23,13 @@ MIN_HEIGHT = config.getint('UI', 'MIN_HEIGHT')
 MIN_WIDTH = config.getint('UI', 'MIN_WIDTH')
 
 def enable_alt_screen():
-    sys.stdout.write('\033[?1049h')
+    sys.stdout.write('\033[?1049h') #show alt screen
+    sys.stdout.write('\033[?25l')   #disable cursor
     sys.stdout.flush()
 
 def disable_alt_screen():
-    sys.stdout.write('\033[?1049l')
+    sys.stdout.write('\033[?25h')  #enable cursor
+    sys.stdout.write('\033[?1049l') #disable alt screen
     sys.stdout.flush()
 
 def main():

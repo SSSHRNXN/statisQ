@@ -38,10 +38,11 @@ def get_cpu_temp():
 
     if ctemp == "###":
         bar_value = 0
+        return ui_bar.full_bar(label, bar_value, "°C", esymbol="+")
     else:
         bar_value = ctemp
+        return ui_bar.full_bar(label, bar_value, "°C")
 
-    return ui_bar.full_bar(label, bar_value, "°C", esymbol="+")
 
 def get_cpu_name():
     with open("/proc/cpuinfo") as file: 
