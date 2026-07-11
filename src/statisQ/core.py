@@ -4,14 +4,23 @@ import os
 import time
 import sys
 
+#config
+from pathlib import Path
+from configparser import ConfigParser
+file_dir = Path(__file__).parent
+config_file = file_dir / 'cfg' / 'statisQ.cfg'
+config = ConfigParser()
+config.read(config_file)
+
+#ui
 from statisQ.lib.coloropen import TTY_Stat
-from .pcstat import mem, cpu
+from .pcstat import mem, cpu, disk
 from .ui.ui_hat_bar import top_bar, bot_bar
 from .ui import ui_incorrect_render
 
-UPDATE_INTERVAL = 1
-MIN_HEIGHT = 21
-MIN_WIDTH = 35
+UPDATE_INTERVAL = config.getint('LOGIC', 'UPDATE_INTERVAL')
+MIN_HEIGHT = config.getint('UI', 'MIN_HEIGHT')
+MIN_WIDTH = config.getint('UI', 'MIN_WIDTH')
 
 def enable_alt_screen():
     sys.stdout.write('\033[?1049h')
@@ -40,6 +49,10 @@ def main():
                 #CPU
                 print(top_bar("CPU", text=f'{cpu.get_cpu_name()}'))
                 print(cpu.get_stat())
+                print(bot_bar())
+                #disk
+                print(top_bar("DISK"))
+                print(disk.get_stat())
                 print(bot_bar())
             time.sleep(UPDATE_INTERVAL)
             sys.stdout.write('\033[J')
