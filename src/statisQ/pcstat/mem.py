@@ -6,7 +6,7 @@ import psutil
 
 label_len = 10
 value_len = 6
-offset = 6 #count of spaces and [] symbols
+offset = 7 #count of spaces and [] symbols
 
 def get_memory_usage():
     memory_stat = psutil.virtual_memory()
@@ -32,13 +32,16 @@ def get_stat():
 
     lines = []
     for label, value, pct in allstat:
-        if label == '%USE%':
-            suff = ' %'
-            bar = ui_bar.bar(pct, pct, bar_length)
+        if label == '%USE%' or label == 'TOTAL':
+            if label == "%USE%":
+                suff = ' %'
+            else:
+                suff = "gb"
+            bar = ui_bar.bar(pct, pct, bar_length, empty_symbol='+')
         else:
             suff = 'gb'
             bar = ui_bar.bar(percent, pct, bar_length)
 
-        lines.append(f'{ui_parts.VERTICAL_L}{label:<{label_len}}{value:^{value_len}} {suff} {bar}{ui_parts.VERTICAL_L}')
+        lines.append(f'{ui_parts.VERTICAL_L}{label:<{label_len}}{value:>{value_len}}  {suff} {bar}{ui_parts.VERTICAL_L}')
 
     return '\n'.join(lines)

@@ -14,10 +14,10 @@ def ubar(value:int, label):
     if label == 'MAX_FQ' or label == 'ARCH':
         symbol = "+"
     else:
-        symbol = ui_parts.HORIZONTAL_L
+        symbol = "/"
 
     bar_length = max(TTY_Stat.columns() - label_len - value_len - offset, 10)
-    bar = ui_bar.bar(value, value, bar_length, empty_symbol=symbol)
+    bar = ui_bar.bar(value, value, bar_length, symbol)
 
     return bar
 
