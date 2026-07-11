@@ -15,7 +15,7 @@ value_len = config.getint('UI', 'VALUE_LEN')
 suff_len  = config.getint('UI', 'SUFF_LEN')
 offset = 3
 
-def get_disk_usage():
+def get_disk_total():
     label = "TOTAL"
     suff = "gb"
 
@@ -26,9 +26,23 @@ def get_disk_usage():
 
     return f'{ui_parts.VERTICAL_L}{label:<{label_len}}{str(disk_total):>{value_len}} {suff:<{suff_len}}{bar}{ui_parts.VERTICAL_L}'
 
+def get_disk_usage():
+    label = "USAGE"
+    suff = "gb"
+
+    disk_total = f'{(psutil.disk_usage('/').total) / 1e9:.1f}'
+    disk_usage = f'{(psutil.disk_usage('/').used) / 1e9:.1f}'
+    disk_usage_prt = int(float(disk_usage) / float(disk_total) * 100)
+
+    bar_len = TTY_Stat.columns() - label_len - value_len - suff_len - offset
+    bar = ui_bar.bar(disk_usage_prt, disk_usage_prt , bar_len)
+
+    return f'{ui_parts.VERTICAL_L}{label:<{label_len}}{str(disk_usage):>{value_len}} {suff:<{suff_len}}{bar}{ui_parts.VERTICAL_L}'
+
 def get_stat():
     lines = []
 
+    lines.append(get_disk_total())
     lines.append(get_disk_usage())
 
     return '\n'.join(lines)

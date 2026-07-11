@@ -76,7 +76,7 @@ def get_cpu_name():
 def get_cpu_freq():
     label = "FREQ"
     curr_fq, min_fq, max_fq = psutil.cpu_freq()
-    mhz_pct = int(int(curr_fq) / int(max_fq) * 100)
+    mhz_pct = int(curr_fq) / int(max_fq) * 100
 
     return final_line(label, mhz_pct, "MHz")
 
