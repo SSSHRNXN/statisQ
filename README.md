@@ -1,0 +1,3 @@
+## Installation 
+
+pipx install .

@@ -12,7 +12,7 @@ dependencies = [
 ]
 
 [project.scripts]
-statisQ = "statisQ.core:main"
+sq = "statisQ.core:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
