@@ -36,13 +36,12 @@ def get_cpu_temp():
             ctemp = int(e.current)
             break
 
-    bar_length = max(TTY_Stat.columns() - label_len - value_len - suff_len - offset, 10)
     if ctemp == "###":
-        bar = ui_bar.bar(0, 100, bar_length)
+        bar_value = 100
     else:
-        bar = ui_bar.bar(ctemp, ctemp, bar_length)
+        bar_value = ctemp
 
-    return ui_bar.full_bar(label, int(ctemp), "°C")
+    return ui_bar.full_bar(label, bar_value, "°C")
 
 def get_cpu_name():
     with open("/proc/cpuinfo") as file: 

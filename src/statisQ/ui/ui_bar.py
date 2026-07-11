@@ -45,9 +45,9 @@ def full_bar(label:str, value:float, suff:str, bar_value=None, str_value=None, o
         str_value = f'{value:>{value_len}.1f}'
 
     if esymbol is None:
-        ubar = bar(value, bar_value, bar_length)
+        ubar = bar(bar_value, bar_value, bar_length)
     else:
-        ubar = bar(value, bar_value, bar_length, empty_symbol=esymbol)
+        ubar = bar(bar_value, bar_value, bar_length, empty_symbol=esymbol)
 
 
     return str(f'{bg_color}{ui_parts.VERTICAL_L}{label:<{label_len}}{str_value:>{value_len}} {suff:<{suff_len}}{BG.RESET}{ubar}{ui_parts.VERTICAL_L}')
