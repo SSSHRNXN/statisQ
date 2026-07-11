@@ -28,11 +28,14 @@ def ubar(value:int, label):
 
     return bar
 
-def final_line(label:str, value:float, suff:str, bar_value=None):
+def final_line(label:str, value:float, suff:str, bar_value=None, str_value=None):
     if bar_value is None:
         bar_value = int(value)
 
-    return str(f'{ui_parts.VERTICAL_L}{label:<{label_len}}{value:>{value_len}.1f} {suff:<{suff_len}}{ubar(bar_value, label)}{ui_parts.VERTICAL_L}')
+    if str_value is None:
+        str_value = f'{value:>{value_len}.1f}'
+
+    return str(f'{ui_parts.VERTICAL_L}{label:<{label_len}}{str_value:>{value_len}} {suff:<{suff_len}}{ubar(bar_value, label)}{ui_parts.VERTICAL_L}')
 
 def get_cpu_usage():
     label = "USAGE"
@@ -87,7 +90,7 @@ def get_cpu_arch():
     label = "ARCH"
     arch = machine()
 
-    return f'{ui_parts.VERTICAL_L}{label:<{label_len}}{arch:^{value_len + 5}}{ubar(int(0), label)}{ui_parts.VERTICAL_L}' 
+    return final_line(label, 0, "  ", str_value=arch)
 
 def get_stat():
     lines = []
