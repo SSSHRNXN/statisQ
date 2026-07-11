@@ -13,3 +13,14 @@ def get_cpu_usage():
     bar = ui_bar.bar(cpu_usage, cpu_usage, bar_length)
 
     return f'{ui_parts.VERTICAL_L}{label:<{label_len}} {cpu_usage:^{cpu_usage_len}} {" %"} {bar}{ui_parts.VERTICAL_L}' 
+
+def get_cpu_name():
+    with open("/proc/cpuinfo") as file: 
+        for line in file:
+            if "model name" in line:
+                cpu_raw_name = line.split(':')[1].strip()
+                cpu_name = cpu_raw_name.split()
+                return ' '.join(cpu_name[:4]) 
+        else:
+            return 'CPU_NAME Not found'
+

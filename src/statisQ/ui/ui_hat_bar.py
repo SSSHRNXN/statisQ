@@ -13,6 +13,7 @@ def top_bar(label, text="", time=False):
     label_str = f'{ui_parts.CORNER_BR}{label}{ui_parts.CORNER_BL}'
     if text == "":
         additional_text = ""
+        add_text_len = 0
     else:
         additional_text = f'{ui_parts.CORNER_BR}{text}{ui_parts.CORNER_BL}'
         add_text_len = len(text) + 2
@@ -24,7 +25,7 @@ def top_bar(label, text="", time=False):
         remover_value = 2
         curr_time = ""
 
-    return f'{ui_parts.CORNER_TL}{label_str}{ui_parts.HORIZONTAL_L * (COLUMNS - remover_value - label_len)}{curr_time}{ui_parts.CORNER_TR}'
+    return f'{ui_parts.CORNER_TL}{label_str}{ui_parts.HORIZONTAL_L * (COLUMNS - remover_value - label_len - add_text_len)}{additional_text}{curr_time}{ui_parts.CORNER_TR}'
 
 
 def bot_bar():

@@ -37,7 +37,7 @@ def main():
                 print(mem.get_stat())
                 print(bot_bar())
                 #CPU
-                print(top_bar("CPU"))
+                print(top_bar("CPU", text=f'{cpu.get_cpu_name()}'))
                 print(cpu.get_cpu_usage())
                 print(bot_bar())
             time.sleep(UPDATE_INTERVAL)
