@@ -38,7 +38,7 @@ def get_cpu_temp():
 
     if ctemp == "###":
         bar_value = 0
-        return ui_bar.full_bar(label, bar_value, "°C", esymbol="+")
+        return ui_bar.full_bar_filled(label, bar_value, "°C", esymbol="+")
     else:
         bar_value = ctemp
         return ui_bar.full_bar(label, bar_value, "°C")
@@ -65,13 +65,13 @@ def get_max_cpu_freq():
     label = "MAX_FQ"
     curr_fq, min_fq, max_fq = psutil.cpu_freq()
     
-    return ui_bar.full_bar(label, max_fq, "MHz", esymbol="+", bar_value=0)
+    return ui_bar.full_bar_filled(label, max_fq, "MHz", esymbol="+")
 
 def get_cpu_arch():
     label = "ARCH"
     arch = machine()
 
-    return ui_bar.full_bar(label, 0, "  ", str_value=arch, esymbol="+")
+    return ui_bar.full_bar_filled(label, 0, "  ", str_value=arch, esymbol="+")
 
 def get_stat():
     lines = []

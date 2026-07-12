@@ -21,7 +21,7 @@ def get_disk_total():
 
     disk_total = f'{(psutil.disk_usage('/').total) / 1e9:.1f}'
 
-    return ui_bar.full_bar(label, float(disk_total), suff, bar_value=0, esymbol="+")
+    return ui_bar.full_bar_filled(label, float(disk_total), suff, bar_value=0, esymbol="+")
 
 def get_disk_usage():
     label = "USAGE(/)"

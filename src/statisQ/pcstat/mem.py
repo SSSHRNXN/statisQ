@@ -29,7 +29,7 @@ def get_stat():
     allstat = [
             ('TOTAL',   f'{get_gb_value(total)}',       0) ,
             ('AVAIL',   f'{get_gb_value(available)}',   100 - percent) ,
-            ('USAGE',    f'{get_gb_value(used)}',        percent) ,
+            ('USAGE',    f'{get_gb_value(used)}',       percent),
             ('%USE%',   f'{percent}',                   percent)
             ]
 
@@ -37,16 +37,15 @@ def get_stat():
 
     lines = []
     for label, value, pct in allstat:
-        esymbol = ui_parts.HORIZONTAL_L
-        if label == '%USE%' or label == 'TOTAL':
-            if label == "%USE%":
-                suff = '%'
-            else:
-                suff = "gb"
-                esymbol = "+" 
+        esymbol = ui_parts.HORIZONTAL_L 
+        if label == 'TOTAL' or label == '%USE%':
+            suff = "%"
+            if label == 'TOTAL':
+                esymbol = "+"
         else:
-            suff = 'gb'
-        lines.append(ui_bar.full_bar(label, float(value), suff, bar_value=pct, esymbol=esymbol))
+            suff = "gb"
+
+        lines.append(ui_bar.full_line(label, float(value), pct, suff, esymbol=esymbol ))
 
 
     return '\n'.join(lines)
