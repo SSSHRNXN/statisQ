@@ -50,7 +50,7 @@ def main():
                 print(bot_bar())
                 #CPU
                 print(top_bar("CPU", text=f'{cpu.get_cpu_name()}'))
-#                print(cpu.get_stat())
+                print(cpu.get_stat())
                 print(bot_bar())
                 #disk
                 print(top_bar("DISK"))
