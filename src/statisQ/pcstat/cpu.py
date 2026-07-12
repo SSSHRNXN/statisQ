@@ -22,7 +22,7 @@ def get_cpu_usage():
     label = "USAGE"
     cpu_usage = psutil.cpu_percent()
 
-    return ui_bar.full_bar(label, cpu_usage, "%")
+    return ui_bar.full_line(label, cpu_usage, int(cpu_usage), "%")
 
 def get_cpu_temp():
     label = "TEMP"
@@ -38,10 +38,10 @@ def get_cpu_temp():
 
     if ctemp == "###":
         bar_value = 0
-        return ui_bar.full_bar(label, bar_value, "°C", esymbol="+")
+        return ui_bar.full_line(label, bar_value, bar_value, "°C", esymbol="+")
     else:
         bar_value = ctemp
-        return ui_bar.full_bar(label, bar_value, "°C")
+        return ui_bar.full_line(label, bar_value, bar_value, "°C")
 
 
 def get_cpu_name():
@@ -57,21 +57,21 @@ def get_cpu_name():
 def get_cpu_freq():
     label = "FREQ"
     curr_fq, min_fq, max_fq = psutil.cpu_freq()
-    mhz_pct = int(curr_fq) / int(max_fq) * 100
+    mhz_pct = (int(curr_fq) / int(max_fq) * 100)
 
-    return ui_bar.full_bar(label, mhz_pct, "MHz")
+    return ui_bar.full_line(label, float(f'{curr_fq:.1f}'), int(mhz_pct), "MHz")
 
 def get_max_cpu_freq():
     label = "MAX_FQ"
     curr_fq, min_fq, max_fq = psutil.cpu_freq()
-    
-    return ui_bar.full_bar(label, max_fq, "MHz", esymbol="+", bar_value=0)
+   
+    return ui_bar.full_line(label, float(f'{max_fq:.1f}'), 0, "MHz", esymbol="+")
 
 def get_cpu_arch():
     label = "ARCH"
     arch = machine()
 
-    return ui_bar.full_bar(label, 0, "  ", str_value=arch, esymbol="+")
+    return ui_bar.full_line(label, arch, 0, " ", esymbol="+")
 
 def get_stat():
     lines = []
