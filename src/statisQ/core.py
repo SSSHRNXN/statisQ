@@ -54,7 +54,7 @@ def main():
                 print(bot_bar())
                 #disk
                 print(top_bar("DISK"))
-#                print(disk.get_stat())
+                print(disk.get_stat())
                 print(bot_bar())
                 print(bot_bar(f'UPDATE INTERVAL:{UPDATE_INTERVAL}'))
             time.sleep(UPDATE_INTERVAL)
