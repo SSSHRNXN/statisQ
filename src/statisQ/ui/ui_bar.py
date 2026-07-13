@@ -41,4 +41,4 @@ def full_line(label:str, value, pct_for_bar:int, suff:str, offset=offset, esymbo
     bar_length = max(TTY_Stat.columns() - label_len - value_len - suff_len - offset,10)
     ubar = bar(pct_for_bar, pct_for_bar, bar_length, empty_symbol=esymbol)
 
-    return f'{bg_color}{ui_parts.VERTICAL_L}{label:<{label_len}}{value:>{value_len}} {suff:<{suff_len}}{ubar}{ui_parts.VERTICAL_L}'
+    return f'{bg_color}{ui_parts.VERTICAL_L}{label:<{label_len}}{value:>{value_len}} {suff:<{suff_len}}{BG.RESET}[{ubar}]{ui_parts.VERTICAL_L}'
