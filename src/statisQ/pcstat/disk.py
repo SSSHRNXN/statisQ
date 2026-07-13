@@ -19,7 +19,7 @@ def get_disk_total():
     label = "TOTAL"
     suff = "gb"
 
-    disk_total = f'{(psutil.disk_usage('/').total) / 1e9:.1f}'
+    disk_total = f'{(psutil.disk_usage("/").total) / 1e9:.1f}'
 
     return ui_bar.full_line(label, float(disk_total), 0, suff, esymbol="+")
 
@@ -27,8 +27,8 @@ def get_disk_usage():
     label = "USAGE(/)"
     suff = "gb"
 
-    disk_total = f'{(psutil.disk_usage('/').total) / 1e9:.1f}'
-    disk_usage = f'{(psutil.disk_usage('/').used) / 1e9:.1f}'
+    disk_total = f'{(psutil.disk_usage("/").total) / 1e9:.1f}'
+    disk_usage = f'{(psutil.disk_usage("/").used) / 1e9:.1f}'
     disk_usage_prt = int(float(disk_usage) / float(disk_total) * 100)
 
     return ui_bar.full_line(label, float(disk_usage_prt), disk_usage_prt, suff)

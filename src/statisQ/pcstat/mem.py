@@ -10,11 +10,12 @@ from ..lib.coloropen import FG, TTY_Stat, clog, BG
 from ..ui import ui_parts, ui_bar
 import psutil
 
-bg_color = f'\033[{config.getint('UI', 'BG_COLOR')}m'
+bg_color = f'\033[{config.getint("UI", "BG_COLOR")}m'
 label_len = config.getint('UI', 'LABEL_LEN')
 value_len = config.getint('UI', 'VALUE_LEN')
 suff_len = config.getint('UI', 'SUFF_LEN')
 offset = config.getint('UI', 'OFFSET')
+
 
 def get_memory_usage():
     memory_stat = psutil.virtual_memory()
@@ -41,6 +42,7 @@ def get_stat():
         if label == 'TOTAL' or label == '%USE%':
             suff = "%"
             if label == 'TOTAL':
+                suff = "gb"
                 esymbol = "+"
         else:
             suff = "gb"

@@ -10,13 +10,15 @@ config.read(config_file)
 from ..lib.coloropen import FG, BG, TTY_Stat
 from ..ui import ui_parts
 
-bg_color = f'\033[{config.getint('UI', 'BG_COLOR')}m'
+bg_color = f'\033[{config.getint("UI", "BG_COLOR")}m'
 label_len = config.getint('UI', 'LABEL_LEN')
 value_len = config.getint('UI', 'VALUE_LEN')
 suff_len  = config.getint('UI', 'SUFF_LEN')
 offset = config.getint('UI', 'OFFSET')
+empty_symbol = config.get('UI', 'EMPTY_SMBL')
+filled_symbol = config.get('UI', 'FILLED_SMBL')
 
-def bar(percent_for_color, value, length=10, filled_symbol='+', empty_symbol=ui_parts.HORIZONTAL_L):
+def bar(percent_for_color, value, length=10, filled_symbol=filled_symbol, empty_symbol=empty_symbol):
     PERSENT_THRESHOLDS = [
             (0, BG.WHITE + FG.BLACK),
             (30, BG.GREEN + FG.WHITE),

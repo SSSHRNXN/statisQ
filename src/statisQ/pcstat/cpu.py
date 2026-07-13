@@ -11,7 +11,7 @@ from ..lib.coloropen import TTY_Stat, BG
 from ..ui import ui_parts, ui_bar
 import psutil
 
-bg_color = f'\033[{config.getint('UI', 'BG_COLOR')}m'
+bg_color = f'\033[{config.getint("UI", "BG_COLOR")}m'
 label_len = config.getint('UI', 'LABEL_LEN')
 value_len = config.getint('UI', 'VALUE_LEN')
 suff_len = config.getint('UI', 'SUFF_LEN')
