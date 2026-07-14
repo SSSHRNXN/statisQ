@@ -37,7 +37,7 @@ def top_bar(label, text="", time=False):
         add_text_len = len(text) + corner_count
 
     if time:
-        remover_value += 8 + corner_count + corner_count #len(time) + time str corners + full bar corners
+        remover_value += 8 + corner_count #len(time) + time str corners + full bar corners
         curr_time = f'{ui_parts.CORNER_BR}{ST.REVERSE}{datetime.now().time().strftime("%H:%M:%S")}{ST.RESET}{ui_parts.CORNER_BL}'
     else:
         curr_time = ""

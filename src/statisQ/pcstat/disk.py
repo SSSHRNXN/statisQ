@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3 from pathlib import Path
 
 from pathlib import Path
 from configparser import ConfigParser
@@ -15,31 +15,48 @@ value_len = config.getint('UI', 'VALUE_LEN')
 suff_len  = config.getint('UI', 'SUFF_LEN')
 offset = config.getint('UI', 'OFFSET')
 
-def get_disk_total():
+def get_disk_total(bar=True, used=False, percent=False,total=False):
     label = "TOTAL"
     suff = "gb"
 
-    disk_total = f'{(psutil.disk_usage("/").total) / 1e9:.1f}'
+#    disk_total = f'{(psutil.disk_usage("/").total) / 1e9:.1f}'
+    disk_total = disk_usage = disk_usage_prt = 0
+    for part in psutil.disk_partitions():
+        if 'loop' in part or part.fstype in ('tmpfs', 'devtmpfs', 'squashfs'):
+            continue
+        usage = psutil.disk_usage(part.mountpoint)
+        disk_total += usage.total
+        disk_usage += usage.used
+        disk_usage_prt += usage.percent
 
-    return ui_bar.full_line(label, float(disk_total), 0, suff, esymbol="+")
+    if bar:
+        return ui_bar.full_line(label, str(f'{disk_total / (1024 ** 3):.1f}'), 0, suff, esymbol="+")
+    elif used:
+        return disk_usage
+    elif percent:
+        return disk_usage_prt
+    elif total:
+        return disk_total
 
 def get_disk_usage():
     label = "USAGE(/)"
     suff = "gb"
+    
+    disk_usage = f'{get_disk_total(bar=False,used=True) / (1024 ** 3):.1f}'
+    disk_total = f'{get_disk_total(bar=False,total=True) / (1024 ** 3):.1f}' 
+    disk_usage_prt = float(disk_usage) / float(disk_total) * 100
 
-    disk_total = f'{(psutil.disk_usage("/").total) / 1e9:.1f}'
-    disk_usage = f'{(psutil.disk_usage("/").used) / 1e9:.1f}'
-    disk_usage_prt = int(float(disk_usage) / float(disk_total) * 100)
-
-    return ui_bar.full_line(label, float(disk_usage_prt), disk_usage_prt, suff)
+    return ui_bar.full_line(label, (disk_usage), int(disk_usage_prt), suff)
 
 def get_disk_usage_prt():
     label = "%USE%"
     suff = "%"
 
-    disk_pct = (psutil.disk_usage('/').percent)
+    disk_usage = f'{get_disk_total(bar=False,used=True) / (1024 ** 3):.1f}'
+    disk_total = f'{get_disk_total(bar=False,total=True) / (1024 ** 3):.1f}' 
+    disk_usage_prt = float(disk_usage) / float(disk_total) * 100
 
-    return ui_bar.full_line(label, disk_pct, int(disk_pct), suff)
+    return ui_bar.full_line(label, f'{disk_usage_prt:.1f}', int(disk_usage_prt), suff)
 
 def get_stat():
     lines = []
