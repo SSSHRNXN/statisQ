@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from os import lseek
 from ..cfg import config
 
 from ..lib.coloropen import ST, TTY_Stat
@@ -13,10 +14,15 @@ value_len = config.UI.VALUE_LEN
 suff_len  = config.UI.SUFF_LEN
 offset = config.UI.OFFSET
 
-def top_bar(label, text="", time=False):
+def top_bar(label, text="", time=False, mid=False):
     COLUMNS = TTY_Stat.columns()
     corner_count = 2
     remover_value = 0 + corner_count #only full bar corners
+    ls = ui_parts.CORNER_TL
+    rs = ui_parts.CORNER_TR
+    if mid:
+        ls = ui_parts.JOIN_RIGHT_L
+        rs = ui_parts.JOIN_LEFT_L
 
     label_len = len(label) + corner_count
     label_str = f'{ui_parts.CORNER_BR}{ST.REVERSE}{label}{ST.RESET}{ui_parts.CORNER_BL}'
@@ -37,11 +43,16 @@ def top_bar(label, text="", time=False):
     else:
         curr_time = ""
 
-    return f'{ui_parts.CORNER_TL}{label_str}{ui_parts.HORIZONTAL_L * (COLUMNS - remover_value - label_len - add_text_len)}{additional_text}{curr_time}{ui_parts.CORNER_TR}'
+    return f'{ls}{label_str}{ui_parts.HORIZONTAL_L * (COLUMNS - remover_value - label_len - add_text_len)}{additional_text}{curr_time}{rs}'
 
 
-def bot_bar(text=""):
+def bot_bar(text="", mid=False):
     COLUMNS = TTY_Stat.columns()
+    ls = ui_parts.CORNER_BL
+    rs = ui_parts.CORNER_BR
+    if mid:
+        ls = ui_parts.JOIN_RIGHT_L
+        rs = ui_parts.JOIN_LEFT_L
 
     if text == "":
         additional_text = ""
@@ -50,7 +61,7 @@ def bot_bar(text=""):
         additional_text = f'{ui_parts.CORNER_BR}{ST.REVERSE}{text}{ST.RESET}{ui_parts.CORNER_BL}'
         add_text_len = len(text) + 2
 
-    return f'{ui_parts.CORNER_BL}{additional_text}{ui_parts.HORIZONTAL_L * (COLUMNS - 2 - add_text_len)}{ui_parts.CORNER_BR}'
+    return f'{ls}{additional_text}{ui_parts.HORIZONTAL_L * (COLUMNS - 2 - add_text_len)}{rs}'
 
 def straight_line():
     COLUMNS = TTY_Stat.columns()

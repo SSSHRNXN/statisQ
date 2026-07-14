@@ -13,6 +13,9 @@ class UI():
 
     #gray
     BG_COLOR = 100
+    #cyan
+    BG_LINE_COLOR = 239
+    LINE_COLOR = 255
 
     FILLED_SMBL = "+"
     EMPTY_SMBL = "─"

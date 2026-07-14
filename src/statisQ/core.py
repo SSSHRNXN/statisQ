@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import os 
 import time
 import sys
 
@@ -8,8 +7,8 @@ import sys
 from .cfg import config
 
 #ui
-from statisQ.lib.coloropen import TTY_Stat, BG
-from .pcstat import mem, cpu, disk
+from statisQ.lib.coloropen import TTY_Stat
+from .pcstat import mem, cpu, disk, other
 from .ui.ui_hat_bar import top_bar, bot_bar
 from .ui import ui_incorrect_render
 
@@ -42,15 +41,14 @@ def main():
                 #RAM
                 print(top_bar("RAM", time=True))
                 print(mem.get_stat())
-                print(bot_bar())
                 #CPU
-                print(top_bar("CPU", text=f'{cpu.get_cpu_name()}'))
+                print(top_bar("CPU", text=f'{cpu.get_cpu_name()}', mid=True))
                 print(cpu.get_stat())
-                print(bot_bar())
                 #disk
-                print(top_bar("DISK"))
+                print(top_bar("DISK", mid=True))
                 print(disk.get_stat())
-                print(bot_bar())
+                print(bot_bar(mid=True))
+                print(other.uptime())
                 print(bot_bar(f'UPDATE INTERVAL:{UPDATE_INTERVAL}'))
             time.sleep(UPDATE_INTERVAL)
             sys.stdout.write('\033[J')

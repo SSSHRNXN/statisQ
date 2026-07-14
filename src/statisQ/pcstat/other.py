@@ -8,4 +8,4 @@ from ..ui import ui_bar
 def uptime():
     uptime = psutil.boot_time()
 
-    return uptime
+    return ui_bar.empty_bar(uptime)

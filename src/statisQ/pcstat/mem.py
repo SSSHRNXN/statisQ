@@ -34,7 +34,7 @@ def get_stat():
 
     lines = []
     for label, value, pct in allstat:
-        esymbol = ui_parts.HORIZONTAL_L 
+        esymbol = ui_parts.nHORIZONTAL_L 
         color = None
         if label == 'TOTAL' or label == '%USE%':
             suff = "%"
