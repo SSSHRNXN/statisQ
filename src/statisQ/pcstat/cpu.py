@@ -48,7 +48,7 @@ def get_cpu_temp():
 
     ctemp = "###"
     for e in cpu_temp:
-        if e.label == 'Tctl':
+        if e.label in ('Tctl', 'Tdie', 'Package id 0'):
             ctemp = int(e.current)
             break
 
