@@ -1,4 +1,4 @@
-#!/usr/bin/env python3 from pathlib import Path
+#!/usr/bin/env python3 from pathlib
 
 from pathlib import Path
 from configparser import ConfigParser

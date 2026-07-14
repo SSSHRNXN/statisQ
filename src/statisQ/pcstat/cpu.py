@@ -51,6 +51,10 @@ def get_cpu_temp():
         if e.label in ('Tctl', 'Tdie', 'Package id 0'):
             ctemp = int(e.current)
             break
+    else:
+        if cpu_temp:
+            ctemp = int(cpu_temp[0].current)
+
 
     if ctemp == "###":
         bar_value = 0
