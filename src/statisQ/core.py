@@ -40,7 +40,7 @@ def main():
             LINES = TTY_Stat.lines()
 
             if COLUMNS < MIN_WIDTH or LINES < MIN_HEIGHT:
-                os.system('clear')
+                sys.stdout.write('\033[2J') #term clear
                 print(ui_incorrect_render.failed_render_window(COLUMNS, LINES, MIN_WIDTH, MIN_HEIGHT))
             else:
                 sys.stdout.write('\033[H')

@@ -40,13 +40,13 @@ def get_stat():
     for label, value, pct in allstat:
         esymbol = ui_parts.HORIZONTAL_L 
         color = None
-        if label is 'TOTAL' or label is '%USE%':
+        if label == 'TOTAL' or label == '%USE%':
             suff = "%"
             if label == 'TOTAL':
                 suff = "gb"
                 esymbol = "+"
         else:
-            if label is 'AVAIL':
+            if label == 'AVAIL':
                 color = percent 
             suff = "gb"
 

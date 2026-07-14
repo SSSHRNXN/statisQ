@@ -44,7 +44,10 @@ def get_disk_usage():
     
     disk_usage = f'{get_disk_total(bar=False,used=True) / (1024 ** 3):.1f}'
     disk_total = f'{get_disk_total(bar=False,total=True) / (1024 ** 3):.1f}' 
-    disk_usage_prt = float(disk_usage) / float(disk_total) * 100
+    if disk_usage == 0 or disk_total == 0:
+        disk_usage_prt = 0
+    else:
+        disk_usage_prt = float(disk_usage) / float(disk_total) * 100
 
     return ui_bar.full_line(label, (disk_usage), int(disk_usage_prt), suff)
 
@@ -54,7 +57,10 @@ def get_disk_usage_prt():
 
     disk_usage = f'{get_disk_total(bar=False,used=True) / (1024 ** 3):.1f}'
     disk_total = f'{get_disk_total(bar=False,total=True) / (1024 ** 3):.1f}' 
-    disk_usage_prt = float(disk_usage) / float(disk_total) * 100
+    if disk_usage == 0 or disk_total == 0:
+        disk_usage_prt = 0
+    else:
+        disk_usage_prt = float(disk_usage) / float(disk_total) * 100
 
     return ui_bar.full_line(label, f'{disk_usage_prt:.1f}', int(disk_usage_prt), suff)
 

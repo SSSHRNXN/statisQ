@@ -19,7 +19,7 @@ empty_symbol = config.get('UI', 'EMPTY_SMBL')
 filled_symbol = config.get('UI', 'FILLED_SMBL')
 
 def bar(percent_for_color, value, length=10, filled_symbol=filled_symbol, empty_symbol=empty_symbol):
-    PERSENT_THRESHOLDS = [
+    PERCENT_THRESHOLDS = [
             (0, BG.WHITE + FG.BLACK),
             (30, BG.GREEN + FG.WHITE),
             (50, BG.YELLOW + FG.WHITE),
@@ -27,7 +27,7 @@ def bar(percent_for_color, value, length=10, filled_symbol=filled_symbol, empty_
             ]
 
     def usage_status_color(percent):
-        for threshold, color in reversed(PERSENT_THRESHOLDS):
+        for threshold, color in reversed(PERCENT_THRESHOLDS):
             if percent >= threshold:
                 return color
 

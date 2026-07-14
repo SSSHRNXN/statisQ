@@ -16,6 +16,7 @@ label_len = config.getint('UI', 'LABEL_LEN')
 value_len = config.getint('UI', 'VALUE_LEN')
 suff_len = config.getint('UI', 'SUFF_LEN')
 offset = config.getint('UI', 'OFFSET')
+empty_symbol = config.get('UI', 'EMPTY_SMBL')
 
 
 def get_cpu_usage():
@@ -24,11 +25,26 @@ def get_cpu_usage():
 
     return ui_bar.full_line(label, cpu_usage, int(cpu_usage), "%")
 
+def get_cpu_name():
+    with open("/proc/cpuinfo") as file: 
+        for line in file:
+            if "model name" in line:
+                cpu_raw_name = line.split(':')[1].strip()
+                cpu_name = cpu_raw_name.split()
+                return ' '.join(cpu_name[:4]) 
+        else:
+            return 'CPU_NAME Not found'
+
+
 def get_cpu_temp():
     label = "TEMP"
 
     sens_temps = psutil.sensors_temperatures()
-    cpu_temp = sens_temps.get('k10temp', [])
+    proc_name = get_cpu_name()
+    if "AMD" in proc_name:
+        cpu_temp = sens_temps.get('k10temp', [])
+    else:
+        cpu_temp = sens_temps.get('coretemp', [])
 
     ctemp = "###"
     for e in cpu_temp:
@@ -44,26 +60,31 @@ def get_cpu_temp():
         return ui_bar.full_line(label, bar_value, bar_value, "°C")
 
 
-def get_cpu_name():
-    with open("/proc/cpuinfo") as file: 
-        for line in file:
-            if "model name" in line:
-                cpu_raw_name = line.split(':')[1].strip()
-                cpu_name = cpu_raw_name.split()
-                return ' '.join(cpu_name[:4]) 
-        else:
-            return 'CPU_NAME Not found'
-
 def get_cpu_freq():
+    esymbol = empty_symbol
     label = "FREQ"
-    curr_fq, min_fq, max_fq = psutil.cpu_freq()
-    mhz_pct = (int(curr_fq) / int(max_fq) * 100)
 
-    return ui_bar.full_line(label, float(f'{curr_fq:.1f}'), int(mhz_pct), "MHz")
+    freq = psutil.cpu_freq()
+    if freq is None:
+        esymbol = "+"
+        curr_fq = min_fq = max_fq = 0
+        mhz_pct = 0
+    else:
+        curr_fq, min_fq, max_fq = freq
+        mhz_pct = (int(curr_fq) / int(max_fq) * 100)
+
+    return ui_bar.full_line(label, float(f'{curr_fq:.1f}'), int(mhz_pct), "MHz", esymbol=esymbol)
 
 def get_max_cpu_freq():
     label = "MAX_FQ"
-    curr_fq, min_fq, max_fq = psutil.cpu_freq()
+
+    freq = psutil.cpu_freq()
+    if freq is None:
+        curr_fq = min_fq = max_fq = 0
+        mhz_pct = 0
+    else:
+        curr_fq, min_fq, max_fq = freq
+        mhz_pct = (int(curr_fq) / int(max_fq) * 100)
    
     return ui_bar.full_line(label, float(f'{max_fq:.1f}'), 0, "MHz", esymbol="+")
 
