@@ -37,8 +37,11 @@ def bar(percent_for_color, value, length=10, filled_symbol=filled_symbol, empty_
     return f'{bar_color}{filled_symbol * int(filled)}{BG.RESET}{FG.GRAY}{empty_symbol * int(empty)}{FG.RESET}'
 
 
-def full_line(label:str, value, pct_for_bar:int, suff:str, offset=offset, esymbol=ui_parts.HORIZONTAL_L):
+def full_line(label:str, value, pct_for_bar:int, suff:str, pct_for_color=None, offset=offset, esymbol=ui_parts.HORIZONTAL_L):
+    if pct_for_color is None:
+        pct_for_color = pct_for_bar
+
     bar_length = max(TTY_Stat.columns() - label_len - value_len - suff_len - offset,10)
-    ubar = bar(pct_for_bar, pct_for_bar, bar_length, empty_symbol=esymbol)
+    ubar = bar(pct_for_color, pct_for_bar, bar_length, empty_symbol=esymbol)
 
     return f'{bg_color}{ui_parts.VERTICAL_L}{label:<{label_len}}{value:>{value_len}} {suff:<{suff_len}}{BG.RESET}[{ubar}]{ui_parts.VERTICAL_L}'

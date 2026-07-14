@@ -39,15 +39,18 @@ def get_stat():
     lines = []
     for label, value, pct in allstat:
         esymbol = ui_parts.HORIZONTAL_L 
-        if label == 'TOTAL' or label == '%USE%':
+        color = None
+        if label is 'TOTAL' or label is '%USE%':
             suff = "%"
             if label == 'TOTAL':
                 suff = "gb"
                 esymbol = "+"
         else:
+            if label is 'AVAIL':
+                color = percent 
             suff = "gb"
 
-        lines.append(ui_bar.full_line(label, float(value), pct, suff, esymbol=esymbol ))
+        lines.append(ui_bar.full_line(label, float(value), pct, suff, pct_for_color=color, esymbol=esymbol ))
 
 
     return '\n'.join(lines)
