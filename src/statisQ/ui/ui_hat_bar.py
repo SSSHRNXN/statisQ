@@ -20,8 +20,8 @@ offset = config.getint('UI', 'OFFSET')
 def top_bar(label, text="", time=False):
     LINES   = TTY_Stat.lines()
     COLUMNS = TTY_Stat.columns()
-    remover_value = 2
     corner_count = 2
+    remover_value = 0 + corner_count #only full bar corners
 
     label_len = len(label) + corner_count
     label_str = f'{ui_parts.CORNER_BR}{ST.REVERSE}{label}{ST.RESET}{ui_parts.CORNER_BL}'
@@ -29,7 +29,7 @@ def top_bar(label, text="", time=False):
         additional_text = ""
         add_text_len = 0
     else:
-        avail_space = COLUMNS - remover_value - label_len
+        avail_space = COLUMNS - corner_count - label_len
         if len(text) > avail_space:
             text = f"{text[:text_offset]}*"
 
@@ -37,7 +37,7 @@ def top_bar(label, text="", time=False):
         add_text_len = len(text) + corner_count
 
     if time:
-        remover_value =+ 10 
+        remover_value += 8 + corner_count + corner_count #len(time) + time str corners + full bar corners
         curr_time = f'{ui_parts.CORNER_BR}{ST.REVERSE}{datetime.now().time().strftime("%H:%M:%S")}{ST.RESET}{ui_parts.CORNER_BL}'
     else:
         curr_time = ""
