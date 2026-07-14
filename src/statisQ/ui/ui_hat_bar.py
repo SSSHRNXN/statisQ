@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 
-from pathlib import Path
-from configparser import ConfigParser
-config_file = Path(__file__).resolve().parents[1] / 'cfg' / 'statisQ.cfg'
-config = ConfigParser()
-config.read(config_file)
+from ..cfg import config
 
 from ..lib.coloropen import ST, TTY_Stat
 from ..ui import ui_parts
 from datetime import datetime 
 
-text_offset = config.getint('UI', 'TEXT_OFFSET')
-min_width = config.getint('UI', 'MIN_WIDTH')
-label_len = config.getint('UI', 'LABEL_LEN')
-value_len = config.getint('UI', 'VALUE_LEN')
-suff_len  = config.getint('UI', 'SUFF_LEN')
-offset = config.getint('UI', 'OFFSET')
+text_offset = config.UI.TEXT_OFFSET
+min_width = config.UI.MIN_WIDTH
+label_len = config.UI.LABEL_LEN
+value_len = config.UI.VALUE_LEN
+suff_len  = config.UI.SUFF_LEN
+offset = config.UI.OFFSET
 
 def top_bar(label, text="", time=False):
     LINES   = TTY_Stat.lines()

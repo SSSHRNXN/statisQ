@@ -1,22 +1,18 @@
 #!/usr/bin/env python3
 
-from pathlib import Path
-from configparser import ConfigParser
-config_file = Path(__file__).resolve().parents[1] / 'cfg' / 'statisQ.cfg'
-config = ConfigParser()
-config.read(config_file)
+from ..cfg import config
 
 from platform import machine
 from ..lib.coloropen import TTY_Stat, BG
 from ..ui import ui_parts, ui_bar
 import psutil
 
-bg_color = f'\033[{config.getint("UI", "BG_COLOR")}m'
-label_len = config.getint('UI', 'LABEL_LEN')
-value_len = config.getint('UI', 'VALUE_LEN')
-suff_len = config.getint('UI', 'SUFF_LEN')
-offset = config.getint('UI', 'OFFSET')
-empty_symbol = config.get('UI', 'EMPTY_SMBL')
+bg_color = f'\033[{config.UI.BG_COLOR}m'
+label_len = config.UI.LABEL_LEN
+value_len = config.UI.VALUE_LEN
+suff_len = config.UI.SUFF_LEN
+offset = config.UI.OFFSET
+empty_symbol = config.UI.EMPTY_SMBL
 
 
 def get_cpu_usage():

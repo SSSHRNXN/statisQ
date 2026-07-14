@@ -5,12 +5,7 @@ import time
 import sys
 
 #config
-from pathlib import Path
-from configparser import ConfigParser
-file_dir = Path(__file__).parent
-config_file = file_dir / 'cfg' / 'statisQ.cfg'
-config = ConfigParser()
-config.read(config_file)
+from .cfg import config
 
 #ui
 from statisQ.lib.coloropen import TTY_Stat, BG
@@ -18,9 +13,9 @@ from .pcstat import mem, cpu, disk
 from .ui.ui_hat_bar import top_bar, bot_bar
 from .ui import ui_incorrect_render
 
-UPDATE_INTERVAL = config.getint('LOGIC', 'UPDATE_INTERVAL')
-MIN_HEIGHT = config.getint('UI', 'MIN_HEIGHT')
-MIN_WIDTH = config.getint('UI', 'MIN_WIDTH')
+UPDATE_INTERVAL = config.LOGIC.UPDATE_INTERVAL
+MIN_HEIGHT = config.UI.MIN_HEIGHT
+MIN_WIDTH = config.UI.MIN_WIDTH
 
 def enable_alt_screen():
     sys.stdout.write('\033[?1049h') #show alt screen
@@ -44,13 +39,13 @@ def main():
                 print(ui_incorrect_render.failed_render_window(COLUMNS, LINES, MIN_WIDTH, MIN_HEIGHT))
             else:
                 sys.stdout.write('\033[H')
-                #RAM
-                print(top_bar("RAM", time=True))
-                print(mem.get_stat())
-                print(bot_bar())
                 #CPU
                 print(top_bar("CPU", text=f'{cpu.get_cpu_name()}'))
                 print(cpu.get_stat())
+                print(bot_bar())
+                #RAM
+                print(top_bar("RAM", time=True))
+                print(mem.get_stat())
                 print(bot_bar())
                 #disk
                 print(top_bar("DISK"))

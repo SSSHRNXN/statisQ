@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 
-from pathlib import Path
-from configparser import ConfigParser
-config_file = Path(__file__).resolve().parents[1] / 'cfg' / 'statisQ.cfg'
-config = ConfigParser()
-config.read(config_file)
+from ..cfg import config
 
 from ..lib.coloropen import FG, TTY_Stat, clog, BG
 from ..ui import ui_parts, ui_bar
 import psutil
 
-bg_color = f'\033[{config.getint("UI", "BG_COLOR")}m'
-label_len = config.getint('UI', 'LABEL_LEN')
-value_len = config.getint('UI', 'VALUE_LEN')
-suff_len = config.getint('UI', 'SUFF_LEN')
-offset = config.getint('UI', 'OFFSET')
+bg_color = f'\033[{config.UI.BG_COLOR}m'
+label_len = config.UI.LABEL_LEN
+value_len = config.UI.VALUE_LEN
+suff_len = config.UI.SUFF_LEN
+offset = config.UI.OFFSET
 
 
 def get_memory_usage():

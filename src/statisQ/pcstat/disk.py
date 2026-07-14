@@ -1,19 +1,15 @@
-#!/usr/bin/env python3 from pathlib
+#!/usr/bin/env python3
 
-from pathlib import Path
-from configparser import ConfigParser
-config_file = Path(__file__).resolve().parents[1] / 'cfg' / 'statisQ.cfg'
-config = ConfigParser()
-config.read(config_file)
+from ..cfg import config
 
 import psutil
 from ..ui import ui_bar, ui_parts
 from ..lib.coloropen import TTY_Stat
 
-label_len = config.getint('UI', 'LABEL_LEN')
-value_len = config.getint('UI', 'VALUE_LEN')
-suff_len  = config.getint('UI', 'SUFF_LEN')
-offset = config.getint('UI', 'OFFSET')
+label_len = config.UI.LABEL_LEN
+value_len = config.UI.VALUE_LEN
+suff_len  = config.UI.SUFF_LEN
+offset = config.UI.OFFSET
 
 def get_disk_total(bar=True, used=False, percent=False,total=False):
     label = "TOTAL"
