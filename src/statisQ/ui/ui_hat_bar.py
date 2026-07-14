@@ -30,7 +30,7 @@ def top_bar(label, text="", time=False, mid=False):
         additional_text = ""
         add_text_len = 0
     else:
-        avail_space = COLUMNS - corner_count - label_len
+        avail_space = COLUMNS - (2*corner_count) - label_len
         if len(text) > avail_space:
             text = f"{text[:text_offset]}*"
 

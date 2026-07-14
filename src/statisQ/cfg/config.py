@@ -2,11 +2,11 @@
 
 class UI():
 
-    LABEL_LEN = 8
+    LABEL_LEN = 6
     VALUE_LEN = 8
     SUFF_LEN = 4
     OFFSET = 5
-    TEXT_OFFSET = 24
+    TEXT_OFFSET = 22
 
     MIN_HEIGHT = 21
     MIN_WIDTH = 35

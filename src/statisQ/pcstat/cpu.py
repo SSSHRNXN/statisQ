@@ -93,7 +93,7 @@ def get_cpu_arch():
     label = "ARCH"
     arch = machine()
     max_fq = get_max_cpu_freq()
-    vp = ui_parts.VERTICAL_L
+    vp = ui_parts.nVERTICAL_L
 
     text = f'{label:^{label_len}}{arch:<{value_len}}{vp}{"MAX_FQ":^{label_len}}{max_fq:^{value_len}}{"MHz":^{suff_len}}{vp}'
 
