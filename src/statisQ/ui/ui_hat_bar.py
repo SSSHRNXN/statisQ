@@ -14,7 +14,6 @@ suff_len  = config.UI.SUFF_LEN
 offset = config.UI.OFFSET
 
 def top_bar(label, text="", time=False):
-    LINES   = TTY_Stat.lines()
     COLUMNS = TTY_Stat.columns()
     corner_count = 2
     remover_value = 0 + corner_count #only full bar corners
@@ -43,7 +42,6 @@ def top_bar(label, text="", time=False):
 
 def bot_bar(text=""):
     COLUMNS = TTY_Stat.columns()
-    LINES   = TTY_Stat.lines()
 
     if text == "":
         additional_text = ""
@@ -53,3 +51,8 @@ def bot_bar(text=""):
         add_text_len = len(text) + 2
 
     return f'{ui_parts.CORNER_BL}{additional_text}{ui_parts.HORIZONTAL_L * (COLUMNS - 2 - add_text_len)}{ui_parts.CORNER_BR}'
+
+def straight_line():
+    COLUMNS = TTY_Stat.columns()
+
+    return f'{ui_parts.VERTICAL_L}{ui_parts.HORIZONTAL_L * (COLUMNS - 2)}{ui_parts.VERTICAL_L}'

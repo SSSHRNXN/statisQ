@@ -35,7 +35,7 @@ def get_disk_total(bar=True, used=False, percent=False,total=False):
         return disk_total
 
 def get_disk_usage():
-    label = "USAGE(/)"
+    label = "USAGE"
     suff = "gb"
     
     disk_usage = f'{get_disk_total(bar=False,used=True) / (1024 ** 3):.1f}'

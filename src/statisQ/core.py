@@ -39,13 +39,13 @@ def main():
                 print(ui_incorrect_render.failed_render_window(COLUMNS, LINES, MIN_WIDTH, MIN_HEIGHT))
             else:
                 sys.stdout.write('\033[H')
-                #CPU
-                print(top_bar("CPU", text=f'{cpu.get_cpu_name()}'))
-                print(cpu.get_stat())
-                print(bot_bar())
                 #RAM
                 print(top_bar("RAM", time=True))
                 print(mem.get_stat())
+                print(bot_bar())
+                #CPU
+                print(top_bar("CPU", text=f'{cpu.get_cpu_name()}'))
+                print(cpu.get_stat())
                 print(bot_bar())
                 #disk
                 print(top_bar("DISK"))

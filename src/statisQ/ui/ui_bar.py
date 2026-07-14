@@ -39,4 +39,10 @@ def full_line(label:str, value, pct_for_bar:int, suff:str, pct_for_color=None, o
     bar_length = max(TTY_Stat.columns() - label_len - value_len - suff_len - offset,10)
     ubar = bar(pct_for_color, pct_for_bar, bar_length, empty_symbol=esymbol)
 
-    return f'{bg_color}{ui_parts.VERTICAL_L}{label:<{label_len}}{value:>{value_len}} {suff:<{suff_len}}{BG.RESET}[{ubar}]{ui_parts.VERTICAL_L}'
+    return f'{ui_parts.VERTICAL_L}{bg_color}{label:<{label_len}}{value:>{value_len}} {suff:<{suff_len}}{BG.RESET}[{ubar}]{ui_parts.VERTICAL_L}'
+
+def empty_bar(text="", center=False):
+    bar_length = TTY_Stat.columns() - len(text) - 2
+    if len(text) > bar_length:
+        text = f'{text[:bar_length - 1]}{BG.WHITE}{FG.BLACK}*{BG.RESET}'
+    return f'{ui_parts.VERTICAL_L}{bg_color}{text}{" " * bar_length}{BG.RESET}{ui_parts.VERTICAL_L}'

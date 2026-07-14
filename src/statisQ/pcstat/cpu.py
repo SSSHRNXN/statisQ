@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
+from statisQ.ui import ui_parts
 from ..cfg import config
 
 from platform import machine
-from ..lib.coloropen import TTY_Stat, BG
-from ..ui import ui_parts, ui_bar
+from ..ui import ui_hat_bar, ui_bar
 import psutil
 
 bg_color = f'\033[{config.UI.BG_COLOR}m'
@@ -86,13 +86,18 @@ def get_max_cpu_freq():
         curr_fq, min_fq, max_fq = freq
         mhz_pct = (int(curr_fq) / int(max_fq) * 100)
    
-    return ui_bar.full_line(label, float(f'{max_fq:.1f}'), 0, "MHz", esymbol="+")
+    #return ui_bar.full_line(label, float(f'{max_fq:.1f}'), 0, "MHz", esymbol="+")
+    return max_fq
 
 def get_cpu_arch():
     label = "ARCH"
     arch = machine()
+    max_fq = get_max_cpu_freq()
+    vp = ui_parts.VERTICAL_L
 
-    return ui_bar.full_line(label, arch, 0, " ", esymbol="+")
+    text = f'{label:^{label_len}}{arch:<{value_len}}{vp}{"MAX_FQ":^{label_len}}{max_fq:^{value_len}}{"MHz":^{suff_len}}{vp}'
+
+    return ui_bar.empty_bar(text)
 
 def get_stat():
     lines = []
@@ -100,7 +105,7 @@ def get_stat():
     lines.append(get_cpu_usage())
     lines.append(get_cpu_temp())
     lines.append(get_cpu_freq())
-    lines.append(get_max_cpu_freq())
+    lines.append(ui_hat_bar.straight_line())
     lines.append(get_cpu_arch())
     
     return '\n'.join(lines)
