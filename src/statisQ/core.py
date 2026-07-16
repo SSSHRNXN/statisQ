@@ -48,6 +48,7 @@ def main():
                 print(top_bar("DISK", mid=True))
                 print(disk.get_stat())
                 print(bot_bar(mid=True))
+                #other
                 print(other.uptime())
                 print(bot_bar(f'UPDATE INTERVAL:{UPDATE_INTERVAL}'))
             time.sleep(UPDATE_INTERVAL)
