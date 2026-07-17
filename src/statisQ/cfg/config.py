@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+
+class UI():
+
+    LABEL_LEN = 6
+    VALUE_LEN = 8
+    SUFF_LEN = 4
+    OFFSET = 5
+    TEXT_OFFSET = 22
+
+    MIN_HEIGHT = 21
+    MIN_WIDTH = 35
+
+    #gray
+    BG_COLOR = 100
+    #cyan
+    BG_LINE_COLOR = 239
+    LINE_COLOR = 255
+
+    FILLED_SMBL = "+"
+    EMPTY_SMBL = "─"
+
+class LOGIC(): 
+
+    UPDATE_INTERVAL = 1

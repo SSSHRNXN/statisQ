@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
 
-from pathlib import Path
-from configparser import ConfigParser
-config_file = Path(__file__).resolve().parents[1] / 'cfg' / 'statisQ.cfg'
-config = ConfigParser()
-config.read(config_file)
+from statisQ.ui import ui_parts
+from ..cfg import config
 
 from platform import machine
-from ..lib.coloropen import TTY_Stat, BG
-from ..ui import ui_parts, ui_bar
+from ..ui import ui_hat_bar, ui_bar
 import psutil
 
-bg_color = f'\033[{config.getint('UI', 'BG_COLOR')}m'
-label_len = config.getint('UI', 'LABEL_LEN')
-value_len = config.getint('UI', 'VALUE_LEN')
-suff_len = config.getint('UI', 'SUFF_LEN')
-offset = config.getint('UI', 'OFFSET')
+bg_color = f'\033[{config.UI.BG_COLOR}m'
+label_len = config.UI.LABEL_LEN
+value_len = config.UI.VALUE_LEN
+suff_len = config.UI.SUFF_LEN
+offset = config.UI.OFFSET
+empty_symbol = config.UI.EMPTY_SMBL
 
 
 def get_cpu_usage():
@@ -23,26 +20,6 @@ def get_cpu_usage():
     cpu_usage = psutil.cpu_percent()
 
     return ui_bar.full_line(label, cpu_usage, int(cpu_usage), "%")
-
-def get_cpu_temp():
-    label = "TEMP"
-
-    sens_temps = psutil.sensors_temperatures()
-    cpu_temp = sens_temps.get('k10temp', [])
-
-    ctemp = "###"
-    for e in cpu_temp:
-        if e.label == 'Tctl':
-            ctemp = int(e.current)
-            break
-
-    if ctemp == "###":
-        bar_value = 0
-        return ui_bar.full_line(label, bar_value, bar_value, "°C", esymbol="+")
-    else:
-        bar_value = ctemp
-        return ui_bar.full_line(label, bar_value, bar_value, "°C")
-
 
 def get_cpu_name():
     with open("/proc/cpuinfo") as file: 
@@ -54,24 +31,73 @@ def get_cpu_name():
         else:
             return 'CPU_NAME Not found'
 
-def get_cpu_freq():
-    label = "FREQ"
-    curr_fq, min_fq, max_fq = psutil.cpu_freq()
-    mhz_pct = (int(curr_fq) / int(max_fq) * 100)
 
-    return ui_bar.full_line(label, float(f'{curr_fq:.1f}'), int(mhz_pct), "MHz")
+def get_cpu_temp():
+    label = "TEMP"
+
+    sens_temps = psutil.sensors_temperatures()
+    proc_name = get_cpu_name()
+    if "AMD" in proc_name:
+        cpu_temp = sens_temps.get('k10temp', [])
+    else:
+        cpu_temp = sens_temps.get('coretemp', [])
+
+    ctemp = "###"
+    for e in cpu_temp:
+        if e.label in ('Tctl', 'Tdie', 'Package id 0'):
+            ctemp = int(e.current)
+            break
+    else:
+        if cpu_temp:
+            ctemp = int(cpu_temp[0].current)
+
+
+    if ctemp == "###":
+        bar_value = 0
+        return ui_bar.full_line(label, bar_value, bar_value, "°C", esymbol="+")
+    else:
+        bar_value = ctemp
+        return ui_bar.full_line(label, bar_value, bar_value, "°C")
+
+
+def get_cpu_freq():
+    esymbol = empty_symbol
+    label = "FREQ"
+
+    freq = psutil.cpu_freq()
+    if freq is None:
+        esymbol = "+"
+        curr_fq = min_fq = max_fq = 0
+        mhz_pct = 0
+    else:
+        curr_fq, min_fq, max_fq = freq
+        mhz_pct = (int(curr_fq) / int(max_fq) * 100)
+
+    return ui_bar.full_line(label, float(f'{curr_fq:.1f}'), int(mhz_pct), "MHz", esymbol=esymbol)
 
 def get_max_cpu_freq():
     label = "MAX_FQ"
-    curr_fq, min_fq, max_fq = psutil.cpu_freq()
+
+    freq = psutil.cpu_freq()
+    if freq is None:
+        curr_fq = min_fq = max_fq = 0
+        mhz_pct = 0
+    else:
+        curr_fq, min_fq, max_fq = freq
+        mhz_pct = (int(curr_fq) / int(max_fq) * 100)
    
-    return ui_bar.full_line(label, float(f'{max_fq:.1f}'), 0, "MHz", esymbol="+")
+    #return ui_bar.full_line(label, float(f'{max_fq:.1f}'), 0, "MHz", esymbol="+")
+    return max_fq
 
 def get_cpu_arch():
     label = "ARCH"
     arch = machine()
+    max_fq = get_max_cpu_freq()
+    vp = ui_parts.nVERTICAL_L
 
-    return ui_bar.full_line(label, arch, 0, " ", esymbol="+")
+    text = f'{label:^{label_len}}{arch:<{value_len}}{"MAX_FQ":^{label_len}}{max_fq:^{value_len}}{"MHz":^{suff_len}}'
+
+    return ui_bar.empty_bar(text)
 
 def get_stat():
     lines = []
@@ -79,7 +105,7 @@ def get_stat():
     lines.append(get_cpu_usage())
     lines.append(get_cpu_temp())
     lines.append(get_cpu_freq())
-    lines.append(get_max_cpu_freq())
+    lines.append(ui_hat_bar.straight_line())
     lines.append(get_cpu_arch())
     
     return '\n'.join(lines)

@@ -1,23 +1,20 @@
 #!usr/bin/env python3
 
-from configparser import ConfigParser
-from pathlib import Path
-
-config_file = Path(__file__).resolve().parents[1] / 'cfg' / 'statisQ.cfg'
-config = ConfigParser()
-config.read(config_file)
+from ..cfg import config
 
 from ..lib.coloropen import FG, BG, TTY_Stat
 from ..ui import ui_parts
 
-bg_color = f'\033[{config.getint('UI', 'BG_COLOR')}m'
-label_len = config.getint('UI', 'LABEL_LEN')
-value_len = config.getint('UI', 'VALUE_LEN')
-suff_len  = config.getint('UI', 'SUFF_LEN')
-offset = config.getint('UI', 'OFFSET')
+bg_color = f'\033[{config.UI.BG_COLOR}m'
+label_len = config.UI.LABEL_LEN
+value_len = config.UI.VALUE_LEN
+suff_len  = config.UI.SUFF_LEN
+offset = config.UI.OFFSET
+empty_symbol = config.UI.EMPTY_SMBL
+filled_symbol = config.UI.FILLED_SMBL
 
-def bar(percent_for_color, value, length=10, filled_symbol='+', empty_symbol=ui_parts.HORIZONTAL_L):
-    PERSENT_THRESHOLDS = [
+def bar(percent_for_color, value, length=10, filled_symbol=filled_symbol, empty_symbol=empty_symbol):
+    PERCENT_THRESHOLDS = [
             (0, BG.WHITE + FG.BLACK),
             (30, BG.GREEN + FG.WHITE),
             (50, BG.YELLOW + FG.WHITE),
@@ -25,7 +22,7 @@ def bar(percent_for_color, value, length=10, filled_symbol='+', empty_symbol=ui_
             ]
 
     def usage_status_color(percent):
-        for threshold, color in reversed(PERSENT_THRESHOLDS):
+        for threshold, color in reversed(PERCENT_THRESHOLDS):
             if percent >= threshold:
                 return color
 
@@ -35,8 +32,18 @@ def bar(percent_for_color, value, length=10, filled_symbol='+', empty_symbol=ui_
     return f'{bar_color}{filled_symbol * int(filled)}{BG.RESET}{FG.GRAY}{empty_symbol * int(empty)}{FG.RESET}'
 
 
-def full_line(label:str, value, pct_for_bar:int, suff:str, offset=offset, esymbol=ui_parts.HORIZONTAL_L):
-    bar_length = max(TTY_Stat.columns() - label_len - value_len - suff_len - offset,10)
-    ubar = bar(pct_for_bar, pct_for_bar, bar_length, empty_symbol=esymbol)
+def full_line(label:str, value, pct_for_bar:int, suff:str, pct_for_color=None, offset=offset, esymbol=ui_parts.nHORIZONTAL_L):
+    if pct_for_color is None:
+        pct_for_color = pct_for_bar
 
-    return f'{bg_color}{ui_parts.VERTICAL_L}{label:<{label_len}}{value:>{value_len}} {suff:<{suff_len}}{ubar}{ui_parts.VERTICAL_L}'
+    bar_length = max(TTY_Stat.columns() - label_len - value_len - suff_len - offset,10)
+    ubar = bar(pct_for_color, pct_for_bar, bar_length, empty_symbol=esymbol)
+
+    return f'{ui_parts.VERTICAL_L}{bg_color}{label:<{label_len}}{value:>{value_len}} {suff:<{suff_len}}{BG.RESET}[{ubar}]{ui_parts.VERTICAL_L}'
+
+def empty_bar(text="", center=False):
+    bar_length = TTY_Stat.columns() - 2 - len(text)
+    if bar_length < 0: bar = 0
+    if len(str(text)) > bar_length + len(text):
+        text = f'{text[:bar_length-1]}{BG.WHITE}{FG.BLACK}*{BG.RESET}'
+    return f'{ui_parts.VERTICAL_L}{bg_color}{text}{" " * (bar_length)}{BG.RESET}{ui_parts.VERTICAL_L}'

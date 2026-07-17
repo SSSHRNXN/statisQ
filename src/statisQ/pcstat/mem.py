@@ -1,20 +1,17 @@
 #!/usr/bin/env python3
 
-from pathlib import Path
-from configparser import ConfigParser
-config_file = Path(__file__).resolve().parents[1] / 'cfg' / 'statisQ.cfg'
-config = ConfigParser()
-config.read(config_file)
+from ..cfg import config
 
 from ..lib.coloropen import FG, TTY_Stat, clog, BG
 from ..ui import ui_parts, ui_bar
 import psutil
 
-bg_color = f'\033[{config.getint('UI', 'BG_COLOR')}m'
-label_len = config.getint('UI', 'LABEL_LEN')
-value_len = config.getint('UI', 'VALUE_LEN')
-suff_len = config.getint('UI', 'SUFF_LEN')
-offset = config.getint('UI', 'OFFSET')
+bg_color = f'\033[{config.UI.BG_COLOR}m'
+label_len = config.UI.LABEL_LEN
+value_len = config.UI.VALUE_LEN
+suff_len = config.UI.SUFF_LEN
+offset = config.UI.OFFSET
+
 
 def get_memory_usage():
     memory_stat = psutil.virtual_memory()
@@ -37,15 +34,19 @@ def get_stat():
 
     lines = []
     for label, value, pct in allstat:
-        esymbol = ui_parts.HORIZONTAL_L 
+        esymbol = ui_parts.nHORIZONTAL_L 
+        color = None
         if label == 'TOTAL' or label == '%USE%':
             suff = "%"
             if label == 'TOTAL':
+                suff = "gb"
                 esymbol = "+"
         else:
+            if label == 'AVAIL':
+                color = percent 
             suff = "gb"
 
-        lines.append(ui_bar.full_line(label, float(value), pct, suff, esymbol=esymbol ))
+        lines.append(ui_bar.full_line(label, float(value), pct, suff, pct_for_color=color, esymbol=esymbol ))
 
 
     return '\n'.join(lines)
