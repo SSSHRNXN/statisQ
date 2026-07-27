@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from os import lseek
 from ..cfg import config
 
 from ..lib.coloropen import ST, TTY_Stat

@@ -2,11 +2,11 @@
 
 from ..cfg import config
 
-from ..lib.coloropen import FG, TTY_Stat, clog, BG
+from ..lib.coloropen import FG, TTY_Stat, clog, BG, BG255
 from ..ui import ui_parts, ui_bar
 import psutil
 
-bg_color = f'\033[{config.UI.BG_COLOR}m'
+bg_color = BG255(config.UI.COLORS.BG)
 label_len = config.UI.LABEL_LEN
 value_len = config.UI.VALUE_LEN
 suff_len = config.UI.SUFF_LEN

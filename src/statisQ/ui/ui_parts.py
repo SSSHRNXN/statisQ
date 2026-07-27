@@ -4,8 +4,8 @@ from ..cfg import config
 from ..lib.coloropen import BG255, BG, FG255
 
 #bg_color = f'\033[{config.UI.BG_LINE_COLOR}m'
-bg_color = BG255(config.UI.BG_LINE_COLOR)
-line_color = FG255(config.UI.LINE_COLOR)
+bg_color = BG255(config.UI.COLORS.BG_LINE)
+line_color = FG255(config.UI.COLORS.LINE)
 
 CORNER_TL = f'{bg_color}{line_color}{"╭"}{BG.RESET}'
 CORNER_TR = f'{bg_color}{line_color}{"╮"}{BG.RESET}'

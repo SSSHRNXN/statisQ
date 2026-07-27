@@ -5,9 +5,10 @@ from ..cfg import config
 
 from platform import machine
 from ..ui import ui_hat_bar, ui_bar
+from ..lib.coloropen import BG255
 import psutil
 
-bg_color = f'\033[{config.UI.BG_COLOR}m'
+bg_color = BG255(config.UI.COLORS.BG)
 label_len = config.UI.LABEL_LEN
 value_len = config.UI.VALUE_LEN
 suff_len = config.UI.SUFF_LEN
