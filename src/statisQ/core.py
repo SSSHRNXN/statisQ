@@ -8,7 +8,7 @@ from .cfg import config
 
 #ui
 from statisQ.lib.coloropen import TTY_Stat
-from .pcstat import mem, cpu, disk, other
+from .pcstat import mem, cpu, disk, other, battery
 from .ui.ui_hat_bar import top_bar, bot_bar
 from .ui import ui_incorrect_render
 
@@ -38,12 +38,14 @@ def main():
                 print(ui_incorrect_render.failed_render_window(COLUMNS, LINES, MIN_WIDTH, MIN_HEIGHT))
             else:
                 sys.stdout.write('\033[H')
-                #RAM
-                print(top_bar("RAM", time=True))
-                print(mem.get_stat())
+                print(top_bar("SYSTEM", time=True))
+                print(battery.get_stat())
                 #CPU
                 print(top_bar("CPU", text=f'{cpu.get_cpu_name()}', mid=True))
                 print(cpu.get_stat())
+                #RAM
+                print(top_bar("RAM", mid=True))
+                print(mem.get_stat())
                 #disk
                 print(top_bar("DISK", mid=True))
                 print(disk.get_stat())

@@ -13,10 +13,10 @@ class UI():
 
     class COLORS():
         #UI colors
-        BG = 231
-        TEXT = 232
-        BG_LINE = 239
-        LINE = 111
+        BG = 233
+        TEXT = 231
+        BG_LINE = 232
+        LINE = 231
 
         #status bar color
         LOW = 45 

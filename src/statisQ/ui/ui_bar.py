@@ -14,31 +14,49 @@ offset = config.UI.OFFSET
 empty_symbol = config.UI.EMPTY_SMBL
 filled_symbol = config.UI.FILLED_SMBL
 
-def bar(percent_for_color, value, length=10, filled_symbol=filled_symbol, empty_symbol=empty_symbol):
+def bar(percent_for_color, value, length=10, filled_symbol=filled_symbol, empty_symbol=empty_symbol, reversed_color=False):
     PERCENT_THRESHOLDS = [
-            (0, BG255(config.UI.COLORS.LOW) + FG.BLACK),
-            (30, BG255(config.UI.COLORS.MID) + FG255(255)),
+            (80, BG255(config.UI.COLORS.FULL) + FG255(255)),
             (50, BG255(config.UI.COLORS.HIGH) + FG255(255)),
-            (80, BG255(config.UI.COLORS.FULL) + FG255(255))
+            (30, BG255(config.UI.COLORS.MID) + FG255(255)),
+            (0, BG255(config.UI.COLORS.LOW) + FG.BLACK),
             ]
 
-    def usage_status_color(percent):
-        for threshold, color in reversed(PERCENT_THRESHOLDS):
+    PERCENT_THRESHOLDS_REVERSED = [
+            (80, BG255(config.UI.COLORS.LOW) + FG.BLACK),
+            (50, BG255(config.UI.COLORS.MID) + FG255(255)),
+            (30, BG255(config.UI.COLORS.HIGH) + FG255(255)),
+            (0, BG255(config.UI.COLORS.FULL) + FG255(255))
+            ]
+
+    def usage_status_color(percent, reversed=False):
+        TH = PERCENT_THRESHOLDS
+        if reversed:
+            TH = PERCENT_THRESHOLDS_REVERSED
+            
+        for threshold, color in TH:
             if percent >= threshold:
                 return color
 
-    bar_color = usage_status_color(percent_for_color)
+    if reversed_color:
+        bar_color = usage_status_color(percent_for_color, reversed=True)
+    else:
+        bar_color = usage_status_color(percent_for_color)
+
     filled = value * length // 100
     empty = length - filled
     return f'{bar_color}{filled_symbol * int(filled)}{BG.RESET}{FG.GRAY}{BG255(config.UI.COLORS.EMPTY_COLOR)}{empty_symbol * int(empty)}{FG.RESET}'
 
 
-def full_line(label:str, value, pct_for_bar:int, suff:str, pct_for_color=None, offset=offset, esymbol=ui_parts.nHORIZONTAL_L):
+def full_line(label:str, value, pct_for_bar:int, suff:str, pct_for_color=None, offset=offset, esymbol=ui_parts.nHORIZONTAL_L, reversed_color=False):
     if pct_for_color is None:
         pct_for_color = pct_for_bar
 
     bar_length = max(TTY_Stat.columns() - label_len - value_len - suff_len - offset,10)
-    ubar = bar(pct_for_color, pct_for_bar, bar_length, empty_symbol=esymbol)
+    if reversed_color:
+        ubar = bar(pct_for_color, pct_for_bar, bar_length, empty_symbol=esymbol, reversed_color=True)
+    else:
+        ubar = bar(pct_for_color, pct_for_bar, bar_length, empty_symbol=esymbol)
 
     return f'{ui_parts.VERTICAL_L}{bg_color}{text_color}{label:<{label_len}}{value:>{value_len}} {suff:<{suff_len}}{BG.RESET}[{ubar}]{ui_parts.VERTICAL_L}'
 
